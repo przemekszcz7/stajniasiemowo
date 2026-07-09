@@ -1,33 +1,20 @@
-# Simple, modern GitHub Actions workflow to build and deploy the static React + Vite site to GitHub Pages.
-# This workflow uses official actions and safe token-based authentication (no custom API keys/secrets required).
+# Simple, robust GitHub Actions workflow to build and deploy the static React + Vite site.
+# This workflow builds the site and pushes it to the 'gh-pages' branch,
+# which is the most foolproof deployment method and avoids API permission issues.
 
 name: Build and Deploy to GitHub Pages
 
 on:
-  # Runs on pushes targeting the default branches
   push:
     branches: ["main", "master"]
-
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+# Sets permissions of the GITHUB_TOKEN to allow pushing to the gh-pages branch
 permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
-# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
-concurrency:
-  group: "pages"
-  cancel-in-progress: false
+  contents: write
 
 jobs:
   build-and-deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
@@ -56,17 +43,9 @@ jobs:
           # you can specify VITE_BASE_PATH if your config utilizes it.
           VITE_BASE_PATH: './'
 
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-        with:
-          enablement: true
-
-      - name: Upload Build Artifacts
-        uses: actions/upload-pages-artifact@v3
-        with:
-          # Vite outputs build artifacts to the 'dist' directory
-          path: './dist'
-
       - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+
