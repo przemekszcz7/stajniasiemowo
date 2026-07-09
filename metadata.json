@@ -1,0 +1,6 @@
+{
+  "name": "Stajnia Siemowo",
+  "description": "Strona internetowa Stajni Siemowo Anna Stróżyńska - nauka jazdy konnej, oprowadzanki i rekreacja w Gostyniu.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
